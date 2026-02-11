@@ -109,7 +109,7 @@ public class ScoutClient implements ClientModInitializer {
 
 		ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
 			if (screen instanceof HandledScreen<?> handledScreen && client.player != null) {
-				if (ScoutUtilClient.isScreenBlacklisted(screen)) {
+				if (!ScoutUtilClient.isScreenAllowed(screen)) {
 					// realistically no one is going to have a screen bigger than 2147483647 pixels
 					for (Slot slot : ScoutUtil.getAllBagSlots(client.player.playerScreenHandler)) {
 						BagSlot bagSlot = (BagSlot) slot;
@@ -200,7 +200,7 @@ public class ScoutClient implements ClientModInitializer {
 				var _topRightSlot = handler.slots.stream().filter(slot->slot.inventory.equals(playerInventory) && slot.getIndex() == 17).findFirst();
 				Slot topRightSlot = _topRightSlot.isPresent() ? _topRightSlot.get() : null;
 				if (topRightSlot != null) {
-					if (!topLeftSlot.isEnabled()) {
+					if (!topRightSlot.isEnabled()) {
 						for (int i = 0; i < ScoutUtil.MAX_POUCH_SLOTS; i++) {
 							BagSlot slot = (BagSlot) ScoutUtil.getBagSlot(ScoutUtil.RIGHT_POUCH_SLOT_START - i, client.player.playerScreenHandler);
 							if (slot != null) {

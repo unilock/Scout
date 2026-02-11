@@ -16,9 +16,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import pm.c7.scout.ScoutMixin.Transformer;
 import pm.c7.scout.ScoutUtil;
+import pm.c7.scout.screen.BagSlot;
 
 @Mixin(value = ScreenHandler.class, priority = 950)
 @Transformer(ScreenHandlerTransformer.class)
@@ -188,6 +190,13 @@ public abstract class ScreenHandlerMixin {
 			return ScoutUtil.getBagSlot(index, player.playerScreenHandler);
 		} else {
 			return self.get(index);
+		}
+	}
+
+	@Inject(method = "canInsertIntoSlot(Lnet/minecraft/screen/slot/Slot;)Z", at = @At("HEAD"), cancellable = true)
+	private void scout$preventBagSlotDrag(Slot slot, CallbackInfoReturnable<Boolean> cir) {
+		if (slot instanceof BagSlot) {
+			cir.setReturnValue(false);
 		}
 	}
 

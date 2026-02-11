@@ -19,7 +19,7 @@ public class ScoutEmiPlugin implements EmiPlugin {
 	public void register(EmiRegistry registry) {
 		registry.addGenericExclusionArea((screen, consumer) -> {
 			if (!(screen instanceof HandledScreen<?> handledScreen)) return;
-			if (ScoutUtilClient.isScreenBlacklisted(screen)) return;
+			if (!ScoutUtilClient.isScreenAllowed(screen)) return;
 
 			MinecraftClient client = MinecraftClient.getInstance();
 

@@ -46,7 +46,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
 
 	@Inject(method = "renderBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawBackground(Lnet/minecraft/client/gui/DrawContext;FII)V"))
 	private void scout$drawSatchelRow(DrawContext graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-		if (this.client != null && this.client.player != null && !ScoutUtilClient.isScreenBlacklisted(this)) {
+		if (this.client != null && this.client.player != null && ScoutUtilClient.isScreenAllowed(this)) {
 			var playerInventory = this.client.player.getInventory();
 
 			ItemStack backStack = ScoutUtil.findBagItem(this.client.player, BaseBagItem.BagType.SATCHEL, false);
@@ -99,7 +99,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
 
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;disableDepthTest()V", remap = false))
 	private void scout$drawPouchSlots(DrawContext graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-		if (this.client != null && this.client.player != null && !ScoutUtilClient.isScreenBlacklisted(this)) {
+		if (this.client != null && this.client.player != null && ScoutUtilClient.isScreenAllowed(this)) {
 			var playerInventory = this.client.player.getInventory();
 
 			ItemStack leftPouchStack = ScoutUtil.findBagItem(this.client.player, BaseBagItem.BagType.POUCH, false);
@@ -238,7 +238,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
 
 	@Inject(method = "isClickOutsideBounds", at = @At("TAIL"), cancellable = true)
 	private void scout$adjustOutsideBounds(double mouseX, double mouseY, int left, int top, int button, CallbackInfoReturnable<Boolean> callbackInfo) {
-		if (this.client != null && this.client.player != null && !ScoutUtilClient.isScreenBlacklisted(this)) {
+		if (this.client != null && this.client.player != null && ScoutUtilClient.isScreenAllowed(this)) {
 			ItemStack backStack = ScoutUtil.findBagItem(this.client.player, BaseBagItem.BagType.SATCHEL, false);
 			if (!backStack.isEmpty()) {
 				BaseBagItem bagItem = (BaseBagItem) backStack.getItem();
@@ -276,7 +276,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
 
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V"))
 	public void scout$drawOurSlots(DrawContext graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-		if (this.client != null && this.client.player != null && !ScoutUtilClient.isScreenBlacklisted(this)) {
+		if (this.client != null && this.client.player != null && ScoutUtilClient.isScreenAllowed(this)) {
 			for (int i = ScoutUtil.SATCHEL_SLOT_START; i > ScoutUtil.BAG_SLOTS_END; i--) {
 				BagSlot slot = (BagSlot) ScoutUtil.getBagSlot(i, this.client.player.playerScreenHandler);
 				if (slot != null && slot.isEnabled()) {
@@ -302,7 +302,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
 
 	@Inject(method = "getSlotAt", at = @At("RETURN"), cancellable = true)
 	public void scout$addSlots(double x, double y, CallbackInfoReturnable<Slot> cir) {
-		if (this.client != null && this.client.player != null && !ScoutUtilClient.isScreenBlacklisted(this)) {
+		if (this.client != null && this.client.player != null && ScoutUtilClient.isScreenAllowed(this)) {
 			for (int i = ScoutUtil.SATCHEL_SLOT_START; i > ScoutUtil.BAG_SLOTS_END; i--) {
 				BagSlot slot = (BagSlot) ScoutUtil.getBagSlot(i, this.client.player.playerScreenHandler);
 				if (this.isPointOverSlot(slot, x, y) && slot != null && slot.isEnabled()) {
